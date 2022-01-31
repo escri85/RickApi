@@ -6,7 +6,7 @@ import Axios from "axios";
 function App() {
   const [characterID, setCharacterId] = useState("");
   const [characterChosen, setCharacterChosen] = useState(false);
-
+  // const [genre, setGenre] = useState();
   const [character, setCharacter] = useState({
     id: "",
     name: "",
@@ -17,22 +17,27 @@ function App() {
   });
 
   const searchRick = () => {
-    Axios.get(`https://rickandmortyapi.com/api/character/?name=${characterID}`).then(
-      (res) => {/* console.log(res.data.results); */
-        const result = res.data.results
-        result.map((item)=>{
-          return(setCharacter({
-            id: item.id,
-        name: item.name,
-        image: item.image,
-        gender: item.gender,
-        species: item.species,
-        status: item.status,
-          }),setCharacterChosen(true))
-          
-        })
+    Axios.get(
+      `https://rickandmortyapi.com/api/character/?name=${characterID}`
+    ).then(
+      (res) => {
+        /* console.log(res.data.results); */
+        const result = res.data.results;
+        result.map((item) => {
+          return (
+            setCharacter({
+              id: item.id,
+              name: item.name,
+              image: item.image,
+              gender: item.gender,
+              species: item.species,
+              status: item.status,
+            }),
+            setCharacterChosen(true)
+            // ,setGenre(true)
+          );
+        });
       }
-
 
       // setCharacter({
 
@@ -44,7 +49,7 @@ function App() {
       //   status: res.data.status,
       // }),
       // setCharacterChosen(true),
-    )
+    );
   };
   //  const searchRick = () => {
   //   Axios.get(`https://rickandmortyapi.com/api/character/?name=${characterID}`).then(
@@ -70,31 +75,76 @@ function App() {
             setCharacterId(event.target.value);
           }}
           value={characterID.toLowerCase()}
+          // onKeyUp={searchRick}
         />
 
         <Boton onClick={searchRick}>Search</Boton>
-       {/*  <Boton>humano</Boton>
+
+        <div className="toggle toggle--knob">
+          {<h2>alive/death</h2>}
+          <input
+            type="checkbox"
+            id="status"
+            className="toggle--checkbox"
+          />
+          {}
+          <label className="toggle--btn" htmlFor="status">
+            <span
+              className="toggle--feature"
+              data-label-on="on"
+              data-label-off="off"
+            ></span>
+          </label>
+        </div>
+        <div className="toggle toggle--knob">
+          {<h2>male/female</h2>}
+          <input type="checkbox" id="genre" className="toggle--checkbox" />
+          {}
+          <label className="toggle--btn" htmlFor="genre">
+            <span
+              className="toggle--feature"
+              data-label-on="on"
+              data-label-off="off"
+            ></span>
+          </label>
+        </div>
+        {/*  <Boton>humano</Boton>
         <Boton>alive</Boton>
         <Boton>alien</Boton>
         <Boton>death</Boton> */}
-
-
       </div>
-      <div className="card">
+      {/* <div className="card">
         {!characterChosen ? (
-          <h1>elige un id</h1>
+          <h1>elige un nombre</h1>
         ) : (
           <>
             <h1> Nombre:{character.name}</h1>
             <p>Identificador:{character.id}</p>
             <p>Genero:{character.gender}</p>
-            <p>Especie{character.species}</p>
-            <p>Especie{character.status}</p>
+            <p>Especie:{character.species}</p>
+            <p>Estado:{character.status}</p>
 
             <img src={character.image} alt="" />
           </>
-        )}
-      </div>
+        )} */}
+      {!characterChosen ? (
+        <h1>elige un nombre</h1>
+      ) : (
+        <div class="card">
+          <div className="image">
+            <img src={character.image} alt="" />
+          </div>
+          <div className="details">
+            <div className="center">
+              <h1> Nombre:{character.name}</h1>
+              <p>Identificador:{character.id}</p>
+              <p>Genero:{character.gender}</p>
+              <p>Especie:{character.species}</p>
+              <p>Estado:{character.status}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
