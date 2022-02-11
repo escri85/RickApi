@@ -1,0 +1,17 @@
+.registro{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    text-align: left;
+}
+.inputs{
+    margin: 10px;
+    text-align: center;
+    :placeholder-shown{
+        text-align: center;
+    }
+}
+H1{
+    text-align: center;
+}

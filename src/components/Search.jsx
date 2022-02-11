@@ -8,10 +8,6 @@ const Search = () => {
   
   const BASEURL = "https://rickandmortyapi.com/api/character";
 
-
-
-
-
 const searchRick= ()=>{
   fetch(BASEURL)
       .then((response) => response.json())
