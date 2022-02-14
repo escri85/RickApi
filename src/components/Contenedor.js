@@ -4,10 +4,10 @@ import styled from "styled-components";
 const Contenedor = styled.div`
     /* max-width: 90%; */
     padding: 40px;
-    /* width: 100%; */
+    width: 100%;
     display: flex;
     flex-direction:column;
-    justtify-content:center;
+    justify-content:center;
     align-items:center;
     /* display: grid;
     gap: 20px;

@@ -1,0 +1,45 @@
+.personajes{
+    display: flex;
+    flex-direction: column;
+}
+.container__busqueda{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    max-height: fit-content;
+    margin-top: 25px;
+}
+.filter{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 1%;
+    & label{
+        font-size: x-large;
+        font-weight: bolder;
+        text-transform: uppercase;
+    }
+   
+}
+.container__card{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+}
+.card{
+    border: 4px solid #892626b3;
+    border-radius: 10px;
+    background-color: darkgray;
+    padding: 2%;
+    margin: 3%;
+   & p{
+    font-weight: bolder;
+    font-size: x-large;
+    font-family: 'Inter';
+   }
+}
+.card__image{
+border-radius: 100%;
+}

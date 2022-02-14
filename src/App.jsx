@@ -2,7 +2,6 @@ import "./App.scss";
 // import { Provider } from "react-redux";
 // import {store} from './redux/store'
 import Menu from './components/Menu'
-import Contenedor from './components/Contenedor'
 import { NavLink, Route, Routes } from "react-router-dom";
 import Carrito from "./pages/Carrito/Carrito"
 import Personajes from "./pages/Personajes/Personajes";
@@ -15,16 +14,27 @@ import Recuperar from "./components/Recuperar/Recuperar";
 import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
 import "primereact/resources/primereact.min.css";                  //core css
 import "primeicons/primeicons.css";       
-
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import './sass/fonts.scss'
+import {reducer} from './redux/reducer'
+import Header from "./components/Header";
 const  App=()=> {
 
+  const store = createStore(reducer);
+  
 
+  console.log(
+    "console,log de de config reducer en la variable store",
+    store.getState()
+  );
   return (
-    
-    <Contenedor>
+    <Provider store={store}>
+      <Header/>
+    <div>
       <Menu>
-        <NavLink to="/login">login</NavLink>
-        <NavLink to="/personajes">busqueda de personajes</NavLink>
+        <NavLink to="/login">LOGIN</NavLink>
+        <NavLink to="/personajes">PERSONAJES</NavLink>
         <NavLink to="/carrito"><FontAwesomeIcon icon={faShoppingCart} /></NavLink>
       </Menu>
       <main>
@@ -41,7 +51,9 @@ const  App=()=> {
         </Routes>
       </main>
       
-    </Contenedor>
+    </div>
+    </Provider>
+
   )
 }
 

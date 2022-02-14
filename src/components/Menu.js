@@ -14,6 +14,9 @@ a {
     color: #fff;
     display: inline-block;
     padding: 15px 20px;
+    font-family: 'Times New Roman', Times, serif;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
 a:hover {
