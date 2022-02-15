@@ -1,86 +1,90 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import Axios from "axios";
 import Boton from "../../styledComponents/Boton";
-
 import "./Personajes.scss";
 const Personajes = ({ agregarProductoAlCarrito }) => {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(true);
 
-  const [characterID, setCharacterId] = useState("");
   // const [characterChosen, setCharacterChosen] = useState(false);
   // const [genre, setGenre] = useState();
 
   const [results, setResults] = useState([]);
 
-  const searchRick = () => {
-    if (characterID === "") {
-      return;
-    }
-    Axios.get(
-      `https://rickandmortyapi.com/api/character/?name=${characterID}`
-    ).then((res) => {
-      console.log("resultados", res.data.results);
-      const result = res.data.results;
-      setResults(result);
+  const [characterID, setCharacterId] = useState("");
+  console.log(characterID);
 
-      // result.map((item) => {
-      //   return (
-      //     setCharacter(
-      //      {
-      //       id: item.id,
-      //       name: item.name,
-      //       image: item.image,
-      //       gender: item.gender,
-      //       species: item.species,
-      //       status: item.status,
-      //     }),
-      //     setCharacterChosen(true)
-      //     // ,setGenre(true)
+  useEffect(() => {
+    const llamada = () => {
+      Axios.get(`https://rickandmortyapi.com/api/character`).then((res) => {
+        console.log("resultados", res.data.results);
+        const result = res.data.results;
+        setResults(result);
+        // result.map((item) => {
+        //   return (
+        //     setCharacter(
+        //      {
+        //       id: item.id,
+        //       name: item.name,
+        //       image: item.image,
+        //       gender: item.gender,
+        //       species: item.species,
+        //       status: item.status,
+        //     }),
+        //     setCharacterChosen(true)
+        //     // ,setGenre(true)
 
-      //   );
-      // });console.log('otro resultado',character)
-    });
-  };
+        //   );
+        // });console.log('otro resultado',character)
+      });
+    };
+    llamada();
+  }, []);
+// const searchRick =()=>{
+//   Axios.get(`https://rickandmortyapi.com/api/character/`).then((res) => {
+//         console.log("resultados", res.data.results);
+//         const result = res.data.results;
+// }
+//   const filter=()=>{
+//     console.log(results);
+// // return results.map((item)=>console.log(item.genre))
+//   }
+const changeAlive=(event)=>{setChecked1(event.value)}
+
   return (
-
-
     <div className="personajes">
       <div className="container__busqueda">
         <InputText
-
+        placeholder="Search"
           type="text"
           onChange={(event) => {
             setCharacterId(event.target.value);
+            // console.log(event.target.value);
           }}
           value={characterID.toLowerCase()}
-          onKeyUp={searchRick}
+          // onKeyUp={searchRick}
         />
         {/* <Boton onClick={searchRick}>Search</Boton> */}
         <div className="filter">
-
           <InputSwitch
-          inputId="binary"
+            inputId="binary"
             checked={checked1}
-            onChange={(e) => setChecked1(e.value)}
+            onChange={changeAlive}
           />
-          <label htmlFor="binary">{checked1 ? 'alive' : 'death'}</label>
+          <label htmlFor="binary">{checked1 ? "alive" : "death"}</label>
         </div>
-          
-<div className="filter">
 
-
+        <div className="filter">
           <InputSwitch
-          inputId="second"
+            inputId="second"
             checked={checked2}
             onChange={(e) => setChecked2(e.value)}
           />
-                   <label htmlFor="second">{checked2 ? 'male' : 'female'}</label>
-</div>
-
+          <label htmlFor="second">{checked2 ? "male" : "female"}</label>
+        </div>
       </div>
 
       <div className="container__card">
@@ -93,17 +97,17 @@ const Personajes = ({ agregarProductoAlCarrito }) => {
             <p>{item.gender}</p>
             <p>{item.status}</p>
             <Boton
-            onClick={() =>
-              agregarProductoAlCarrito(item.id, item.name,item.image)
-            }
-          >
-            add to cart
-          </Boton>
+              onClick={() =>
+                agregarProductoAlCarrito(item.id, item.name, item.image)
+              }
+            >
+              add to cart
+            </Boton>
           </div>
         ))}
       </div>
+    
     </div>
-
   );
 };
 
