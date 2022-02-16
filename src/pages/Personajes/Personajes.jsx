@@ -9,13 +9,10 @@ import "./Personajes.scss";
 const Personajes = ({ agregarProductoAlCarrito }) => {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(true);
-
-
-
-  const [usuarios, setUsuarios]= useState([]);
-  const [tablaUsuarios, setTablaUsuarios]= useState([]);
-  const [busqueda, setBusqueda]= useState("");
-
+const [charactersStatus,setCharactersStatus]=useState([])
+  const [usuarios, setUsuarios] = useState([]);
+  const [tablaUsuarios, setTablaUsuarios] = useState([]);
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     const llamada = () => {
@@ -23,40 +20,51 @@ const Personajes = ({ agregarProductoAlCarrito }) => {
         console.log("resultados", res.data.results);
         const result = res.data.results;
         setUsuarios(result);
-    setTablaUsuarios(result);
-      
+        setTablaUsuarios(result);
+        setCharactersStatus(result)
       });
     };
     llamada();
   }, []);
 
-const changeAlive=(event)=>{
-  setChecked1(event.value)
-
+  const changeAlive = (event) => {
+    const evento = event.target.value
+    setChecked1(event.value);
+   const filterStatus = tablaUsuarios.filter((item)=>{
+if(item.status.toLowerCase()==='alive' && evento===true)return item
+else{
+  if(item.status.toLowerCase()==='dead' && evento===false)return item
 }
+     }
+     )
+     console.log(filterStatus); 
+   setCharactersStatus(filterStatus)
 
-const handleChange=e=>{
-  setBusqueda(e.target.value);
-  filtrar(e.target.value);
-}
+  };
 
-const filtrar=(terminoBusqueda)=>{
-  var resultadosBusqueda=tablaUsuarios.filter((elemento)=>{
-    if(elemento.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-   
-    ){
-      return elemento;
-    }
-  });
-  setUsuarios(resultadosBusqueda);
-}
-
+  const handleChange = (e) => {
+    setBusqueda(e.target.value);
+    filtrarNombre(e.target.value);
+  };
+  const filtrarNombre = (terminoBusqueda) => {
+    var resultadosBusqueda = tablaUsuarios.filter((elemento) => {
+      if (
+        elemento.name
+          .toString()
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase())
+      ) {
+        return elemento;
+      }
+    });
+    setUsuarios(resultadosBusqueda);
+  };
 
   return (
     <div className="personajes">
       <div className="container__busqueda">
         <InputText
-        placeholder="Search"
+          placeholder="Search"
           type="text"
           onChange={handleChange}
           value={busqueda}
@@ -64,7 +72,6 @@ const filtrar=(terminoBusqueda)=>{
         />
 
         <div className="filter">
-       
           <InputSwitch
             inputId="binary"
             checked={checked1}
@@ -83,28 +90,49 @@ const filtrar=(terminoBusqueda)=>{
         </div>
       </div>
 
-      <div className="container__card">
+{/* listado completo */}
+
+      {/* <div className="container__card">
         {usuarios &&
-        usuarios.map((item) => (
-          <div key={item.id} className="card">
-            <div>
-              <img className="card__image" src={item.image} alt="" />
+          usuarios.map((item) => (
+            <div key={item.id} className="card">
+              <div>
+                <img className="card__image" src={item.image} alt="" />
+              </div>
+              <h1 className="card__name">{item.name}</h1>
+              <p>{item.gender}</p>
+              <p>{item.status}</p>
+              <Boton
+                onClick={() =>
+                  agregarProductoAlCarrito(item.id, item.name, item.image)
+                }
+              >
+                add to cart
+              </Boton>
             </div>
-            <h1 className="card__name">{item.name}</h1>
-            <p>{item.gender}</p>
-            <p>{item.status}</p>
-            <Boton
-              onClick={() =>
-                agregarProductoAlCarrito(item.id, item.name, item.image)
-              }
-            >
-              add to cart
-            </Boton>
-          </div>
-        ))}
+          ))}
+      </div> */}
+      {/* listado alive or dead */}
+      <div className="container__card">
+        {charactersStatus.length>0 &&
+          charactersStatus.map((item) => (
+            <div key={item.id} className="card">
+              <div>
+                <img className="card__image" src={item.image} alt="" />
+              </div>
+              <h1 className="card__name">{item.name}</h1>
+              <p>{item.gender}</p>
+              <p>{item.status}</p>
+              <Boton
+                onClick={() =>
+                  agregarProductoAlCarrito(item.id, item.name, item.image)
+                }
+              >
+                add to cart
+              </Boton>
+            </div>
+          ))}
       </div>
-     
-    
     </div>
   );
 };
@@ -125,4 +153,3 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Personajes);
-
