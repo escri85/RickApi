@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { InputText } from "primereact/inputtext";
@@ -9,50 +10,47 @@ const Personajes = ({ agregarProductoAlCarrito }) => {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(true);
 
-  // const [characterChosen, setCharacterChosen] = useState(false);
-  // const [genre, setGenre] = useState();
 
-  const [results, setResults] = useState([]);
 
-  const [characterID, setCharacterId] = useState("");
-  console.log(characterID);
+  const [usuarios, setUsuarios]= useState([]);
+  const [tablaUsuarios, setTablaUsuarios]= useState([]);
+  const [busqueda, setBusqueda]= useState("");
+
 
   useEffect(() => {
     const llamada = () => {
       Axios.get(`https://rickandmortyapi.com/api/character`).then((res) => {
         console.log("resultados", res.data.results);
         const result = res.data.results;
-        setResults(result);
-        // result.map((item) => {
-        //   return (
-        //     setCharacter(
-        //      {
-        //       id: item.id,
-        //       name: item.name,
-        //       image: item.image,
-        //       gender: item.gender,
-        //       species: item.species,
-        //       status: item.status,
-        //     }),
-        //     setCharacterChosen(true)
-        //     // ,setGenre(true)
-
-        //   );
-        // });console.log('otro resultado',character)
+        setUsuarios(result);
+    setTablaUsuarios(result);
+      
       });
     };
     llamada();
   }, []);
-// const searchRick =()=>{
-//   Axios.get(`https://rickandmortyapi.com/api/character/`).then((res) => {
-//         console.log("resultados", res.data.results);
-//         const result = res.data.results;
-// }
-//   const filter=()=>{
-//     console.log(results);
-// // return results.map((item)=>console.log(item.genre))
-//   }
-const changeAlive=(event)=>{setChecked1(event.value)}
+
+const changeAlive=(event)=>{
+  setChecked1(event.value)
+
+}
+
+const handleChange=e=>{
+  setBusqueda(e.target.value);
+  filtrar(e.target.value);
+}
+
+const filtrar=(terminoBusqueda)=>{
+  var resultadosBusqueda=tablaUsuarios.filter((elemento)=>{
+    if(elemento.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+   
+    ){
+      return elemento;
+    }
+  });
+  setUsuarios(resultadosBusqueda);
+}
+
 
   return (
     <div className="personajes">
@@ -60,15 +58,13 @@ const changeAlive=(event)=>{setChecked1(event.value)}
         <InputText
         placeholder="Search"
           type="text"
-          onChange={(event) => {
-            setCharacterId(event.target.value);
-            // console.log(event.target.value);
-          }}
-          value={characterID.toLowerCase()}
+          onChange={handleChange}
+          value={busqueda}
           // onKeyUp={searchRick}
         />
-        {/* <Boton onClick={searchRick}>Search</Boton> */}
+
         <div className="filter">
+       
           <InputSwitch
             inputId="binary"
             checked={checked1}
@@ -88,7 +84,8 @@ const changeAlive=(event)=>{setChecked1(event.value)}
       </div>
 
       <div className="container__card">
-        {results.map((item) => (
+        {usuarios &&
+        usuarios.map((item) => (
           <div key={item.id} className="card">
             <div>
               <img className="card__image" src={item.image} alt="" />
@@ -106,6 +103,7 @@ const changeAlive=(event)=>{setChecked1(event.value)}
           </div>
         ))}
       </div>
+     
     
     </div>
   );
@@ -128,35 +126,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Personajes);
 
-// {!characterChosen ? (
-//   <h1>elige un nombre</h1>
-// ) : (
-
-//   <form action="" onSubmit={onSubmit}>
-//     <div className="card">
-// results.map((item)=>(
-
-//         <div className="image">
-//           <img src={item.image} alt="" />
-//         </div>
-//         <div className="details">
-//           <div className="center">
-//             <h1> Nombre:{item.name}</h1>
-//             <p>Identificador:{item.id}</p>
-//             <p>Genero:{item.gender}</p>
-//             <p>Especie:{item.species}</p>
-//             <p>Estado:{item.status}</p>
-//             {/* <Boton type="submit">add to cart</Boton> */}
-//           </div>
-//           <Boton
-//             onClick={() =>
-//               agregarProductoAlCarrito(item.id, item.name,character.image)
-//             }
-//           >
-//             add to cart
-//           </Boton>
-//         </div>
-// )
-//     </div>
-// </form>
-//  )}
